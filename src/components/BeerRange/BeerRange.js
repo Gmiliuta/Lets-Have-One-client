@@ -1,16 +1,18 @@
-import React, { useState} from 'react';
+import React from 'react';
 
 import { Dropdown } from 'semantic-ui-react'
 
 import './BeerRange.css'
 
-function BeerRange({barsData, beersFilter}) {
+//beers var is outside in order not to reset the value everytime component re-renders
+let beers = [];
+
+function BeerRange({barsData, beersFilter }) {
 
   // getting an object of all beers alphabetically to be shown in dropwon
   const allBeers = getBeers(barsData);
   
   // passing selected beers to App component to update the state for Maps
-  let beers = [];
   function getValue(event) {
     //if beer is selected it adds it to the arr and updates the state
     if (event.target.textContent) {
@@ -22,7 +24,7 @@ function BeerRange({barsData, beersFilter}) {
       beersFilter(beers);
     }
   }
-
+  
   return (
     <div className="beerRange">
      <p>Select your favourite beer</p>

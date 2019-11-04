@@ -1,16 +1,39 @@
-import React, { useState} from 'react';
+import React, { useEffect} from 'react';
 
 import { Dropdown } from 'semantic-ui-react'
 
 import './TypeRange.css';
 
-function TypeRange({barsData, typesFilter}){
+//beerTypes var placed outside to it would not reset automatically by re-rendering
+let beerTypes = [];
 
-  console.log(barsData);
+function TypeRange({barsData, typesFilter, filterReset }){
+   
+  // getting an array of types of beer
   const allTypes = getTypes(barsData);
   
+  // console.log(allTypes);
+  // function resetAllBeersOrTypes() {
+  //   const element = document.getElementsByClassName("ui label");
+  //   console.log('getting here before if')
+  //   if (element.length) {
+  //     console.log('gettingHere')
+  //     // console.log(element);
+  //     for (let i = 0; i < element.length; i++) {
+  //       if(allTypes.some(el => el.text !== element[i].innerText)) {
+  //         element[i].parentNode.removeChild(element[i]);
+  //       } else continue;
+  //     }
+  //   }
+  // }
+  
+  // useEffect(() => {
+  //   resetAllBeersOrTypes();
+  // }, [filterReset])
+
+  // console.log(barsData);
+  
    // passing selected beer types to App component to update the state for Maps
-   let beerTypes = [];
    function getValueBeerType(event) {
      if (event.target.textContent) {
        beerTypes.push(event.target.textContent);
@@ -55,6 +78,6 @@ function getTypes(data) {
     text: el,
     value: el
   }))
-  console.log(allTypesObj)
+  // console.log(allTypesObj)
   return allTypesObj;
 }

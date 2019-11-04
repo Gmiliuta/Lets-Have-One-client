@@ -1,13 +1,17 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 
 import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
 
-function PriceRange({barsData, priceFilter}) {
+function PriceRange({barsData, priceFilter, priceReset}) {
   
   const initialPrice = getPrices(barsData);
 
   const [priceRange, setPriceRange] = useState(initialPrice);
+ 
+  useEffect(() => {
+    setPriceRange(initialPrice);
+  }, [priceReset])
   
   return (
     <div className="priceRange">
