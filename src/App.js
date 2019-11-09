@@ -5,123 +5,199 @@ import BeerRange from './components/BeerRange/BeerRange';
 import PriceRange from './components/PriceRange/PriceRange';
 import Map from './components/Map/Map';
 import IntroLogo from './containers/IntroLogo/IntroLogo';
+import AllFilters from './components/AllFilters/AllFilters';
+import NavBar from './components/NavBar/NavBar';
+import BeerDetails from './components/BeerDetails/BeerDetails';
 
-import { withGoogleMap, withScriptjs } from "react-google-maps";
+import { LoadScript } from '@react-google-maps/api';
 
 import './App.css';
 
+const googleApis = ['places'];
 
-function App() {
+const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+
+
+function App () {
 
   // wrapping Map compoment as per instructions from NPM package
-  const MapWrapped = useCallback(withScriptjs(withGoogleMap(Map)), []);
-  
-  const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+  const MapWrapped = useCallback(Map, []);
   
   const [barsData, setBarsData] = useState([]);
   const [mapsData, setMapsData] = useState([]);
   const [markers, setMarkers] = useState('');
   
-  // reseting filters 
-  const [filterReset, setFilterReset] = useState(0);
-  const [priceReset, setPriceReset] = useState(0);
+  // filters 
+  const initialFilter = {price: false, beer: false, beerType: false};
+  const [barFilters, setFilters] = useState(initialFilter);
 
+  //height vh for map
+  const [mapHeight, setMapHeight] = useState('82vh');
+  
   useEffect(()=>{
-    fetch("http://localhost:3001/getBarsData")
+    fetch('http://localhost:3001/getBarsData')
       .then(response => response.json())
       .then(response => setBarsData(response));
     fetch('http://localhost:3001/getMapsData')
       .then(response => response.json())
       .then(response => setMapsData(response));  
-    }, [])
+  }, []);
 
   // filtering bars by the house beer price
-  function priceFilter(prices) {
+  function priceFilter (prices) {
     const filteredBarsData = barsData.filter(el => el.house_beer_price >= prices.min && el.house_beer_price <= prices.max);
     const filteredMapsData = mapsData.filter(el => {
       for (let i = 0; i < filteredBarsData.length; i++) {
         if (el.name.toLowerCase().includes(filteredBarsData[i].name.toLowerCase())) return true;
       }
-    })
+      return false;
+    });
     setMarkers(filteredMapsData);
   }
 
   //filtering bars by selected beer and reseting price and type filter
-  function beersFilter(beersSelected) {
-    setPriceReset(priceReset+1);
+  function beersFilter (beersSelected) {
     let filteredBarsData = barsData.slice();
     if (!beersSelected.length) {
       setMarkers(mapsData);
     } else {
       filteredBarsData = filteredBarsData.filter(el => {
-        if(beersSelected.length === 1) {
-          if (el.beers.indexOf(beersSelected[0]) >= 0) return true
+        if (beersSelected.length === 1) {
+          if (el.beers.indexOf(beersSelected[0]) >= 0) return true;
+          return false;
         } else {
           // show bar(s) which have all your selected beers in one place
           return beersSelected.every(beersEl => el.beers.includes(beersEl));
-        }
-        });
-      const filteredMapsData = mapsData.filter(el => {
-        for (let i = 0; i < filteredBarsData.length; i++) {
-          if (el.name.toLowerCase().includes(filteredBarsData[i].name.toLowerCase())) return true;
-        }
-      })
-      setMarkers(filteredMapsData);
-    }
-  }
-  
-  //filtering bars by selected beer TYPE and reseting price and beer filters
-  function typesFilter(typesSelected){
-    console.log(typesSelected);
-    setPriceReset(priceReset+1);
-    setFilterReset(filterReset+1);
-    console.log(filterReset);
-    let filteredBarsData = barsData.slice();
-    if(!typesSelected.length) {
-      setMarkers(mapsData);
-    } else {
-      filteredBarsData = filteredBarsData.filter(el => {
-        if(typesSelected.length === 1) {
-          if (el.types.indexOf(typesSelected[0]) >= 0) return true;
-        } else {
-          return typesSelected.every(typeEl => el.types.includes(typeEl));
         }
       });
       const filteredMapsData = mapsData.filter(el => {
         for (let i = 0; i < filteredBarsData.length; i++) {
           if (el.name.toLowerCase().includes(filteredBarsData[i].name.toLowerCase())) return true;
         }
-      })
+        return false;
+      });
       setMarkers(filteredMapsData);
     }
   }
 
+  //filtering bars by selected beer TYPE and reseting price and beer filters
+  function typesFilter (typesSelected) {
+    let filteredBarsData = barsData.slice();
+    if (!typesSelected.length) {
+      setMarkers(mapsData);
+    } else {
+      filteredBarsData = filteredBarsData.filter(el => {
+        if (typesSelected.length === 1) {
+          if (el.types.indexOf(typesSelected[0]) >= 0) return true;
+        } else {
+          return typesSelected.every(typeEl => el.types.includes(typeEl));
+        }
+        return false;
+      });
+      const filteredMapsData = mapsData.filter(el => {
+        for (let i = 0; i < filteredBarsData.length; i++) {
+          if (el.name.toLowerCase().includes(filteredBarsData[i].name.toLowerCase())) return true;
+        }
+        return false;
+      });
+      setMarkers(filteredMapsData);
+    }
+  }
+
+  // function to show filters 
+  function toggleFilters (event) {
+    const filt = event.target.innerText; 
+    setBarsData(barsData);
+    setMarkers(mapsData);
+    if (filt === 'Price') {
+      setFilters({price: true, beer: false, beerType: false });
+      setMapHeight('64vh');
+    }
+    if (filt === 'Price' && barFilters.price) {
+      setFilters({price: false, beer: false, beerType: false });
+      setMapHeight('82vh');
+    } 
+    if (filt === 'Beer') {
+      setFilters({price: false, beer: true, beerType: false });
+      setMapHeight('64vh');
+    } 
+    if (filt === 'Beer' && barFilters.beer) {
+      setFilters({price: false, beer: false, beerType: false });
+      setMapHeight('82vh');
+    } 
+    if (filt === 'Beer type') {
+      setFilters({price: false, beer: false, beerType: true });
+      setMapHeight('64vh');
+    } 
+    if (filt === 'Beer type' && barFilters.beerType) {
+      setFilters({price: false, beer: false, beerType: false});
+      setMapHeight('82vh');
+    } 
+  }
+
+  // managing components for beerList and map
+  const [mapBeerComp, setMapBeerComp] = useState(false);
+  
+
+  // beer details
+  const [showBeerItem, setBeerItem] = useState(false);
+  const [beerName, setBeerName] = useState('');
+
+  function showBeerComponent () {
+    setMapBeerComp(true);
+    setBeerItem(false);
+  }
+
+  function showMapComponent () {
+    setMapBeerComp(false);
+  }
+ 
+  // fucnt for beerDetailsItem
+  function displayBeerItem (event) {
+    setBeerItem(true);
+    // replaceing dashes in the beerNames to avoid fetch crashing
+    if (event.target.innerText.includes('/')) {
+      let replaceDash = event.target.innerText;
+      replaceDash = replaceDash.replace('/', '   ');
+      setBeerName(replaceDash);
+    } else {
+      setBeerName(event.target.innerText);
+
+    }
+  }
+
+
   // having introLogo image for PWA
-  let [image, setImage] = useState(true);
+  const [image, setImage] = useState(true);
 
   setTimeout(()=>{
     setImage(false);
   }, 1500);
 
   return (
-    <div className="dashboard">
-      {image ? <IntroLogo/> : 
-        <div className="testing">
-          <PriceRange  barsData={barsData && barsData} priceFilter={priceFilter} priceReset={priceReset && priceReset}/>
-          <BeerRange barsData={barsData && barsData} beersFilter={beersFilter} />
-          <TypeRange barsData={barsData && barsData} typesFilter={typesFilter} filterReset={filterReset && filterReset}/>
-           <div className="mapContainer">
-            <MapWrapped
-              googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${API_KEY}`}
-              loadingElement={<div style={{ height: `100%` }} />}
-              containerElement={<div style={{ height: `100%` }} />}
-              mapElement={<div style={{ height: `100%` }} />}
-              mapsData={markers ? markers : mapsData}
-            />
-           </div>
-        </div>
-        
-      }
+    <div> 
+      { image ? <IntroLogo/> : <div className="dashboard">
+        {/* mockMAP placed below is used in InfoWindow to fetch place data from Google API */}
+        <div id="mockMap" style={{display: 'none'}}></div>
+        {mapBeerComp ? <BeerDetails displayBeerItem={displayBeerItem} showBeerItem={showBeerItem} beerName={beerName && beerName} /> : 
+          <div className="testing">
+            <AllFilters toggleFilters={toggleFilters}/>
+            { barFilters.price && <PriceRange  barsData={barsData && barsData} priceFilter={priceFilter} />}
+            { barFilters.beer && <BeerRange barsData={barsData && barsData} beersFilter={beersFilter} />}
+            { barFilters.beerType &&<TypeRange barsData={barsData && barsData} typesFilter={typesFilter} />}
+            <div className="mapContainer" style={{height: `${mapHeight}`}}>
+              <LoadScript
+                id="script-loader"
+                googleMapsApiKey={API_KEY}
+                libraries={googleApis}
+              >
+                <MapWrapped mapsData={markers ? markers : mapsData} mapHeight={mapHeight && mapHeight}/>
+              </LoadScript>
+            </div>
+          </div>
+        }
+        <NavBar showBeerComponent={showBeerComponent} showMapComponent={showMapComponent}/>
+      </div>}
     </div>
   );
 }

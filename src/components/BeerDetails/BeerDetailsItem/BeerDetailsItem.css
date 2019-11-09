@@ -1,0 +1,51 @@
+.cardDetails{
+  height: 94vh;
+  max-height: 94vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardDetailsImageInfo{
+  display: flex;
+  flex-direction: row;
+}
+
+.cardDetailsImageCont,
+.cardDetailsImage{
+  height: 45vh;
+  width: 21vh;
+  max-height: 45vh; 
+  max-width: 21vw;
+}
+
+
+.cardDetailsContent{
+  align-self: center;
+}
+
+.cardDetailsImageCont{
+  align-self: center;
+  margin: 5vh 7vw;
+}
+
+.cardDetailsBreweryDescription{
+  margin: 3vh 7vw;
+  overflow: scroll;
+  /* text-align: center; */
+}
+
+.cardDetailsBreweryDescription>h4{
+  font-size: 16px;
+}
+
+.cardDetailsBreweryDescription::-webkit-scrollbar{
+  display: none;
+}
+
+.cardDetailsStars{
+  margin: 14px 0;
+}
+
+.cardDetailsBreweryStyle>span>h5{
+  font-size: 16px;
+}

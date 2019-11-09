@@ -1,5 +1,4 @@
-.input-range {
-  display: hidden;
+.priceRange {
+  max-width: 90vw;
+  transition: all 1s linear;
 }
-
-

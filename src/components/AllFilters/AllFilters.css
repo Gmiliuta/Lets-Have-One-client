@@ -1,0 +1,12 @@
+.headerFilters{
+  background: rgb(231, 150, 81);
+  height: 12vh;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* .headerFiltersButtons{
+  
+} */

@@ -1,0 +1,6 @@
+/* .dropDownOpenList {
+  padding-top: 20px;
+} */
+.ui.selection.visible.dropdown>.text {
+  color: white;
+}

@@ -1,0 +1,10 @@
+.BeersDetailsList{
+  overflow: scroll;
+  height: 88.3vh;
+  width: 100vw;
+}
+
+.BeersDetailsList::-webkit-scrollbar{
+  display: none;
+}
+

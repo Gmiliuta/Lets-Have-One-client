@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown } from 'semantic-ui-react';
 
-import './BeerRange.css'
+import './BeerRange.css';
 
 //beers var is outside in order not to reset the value everytime component re-renders
 let beers = [];
 
-function BeerRange({barsData, beersFilter }) {
+function BeerRange ({barsData, beersFilter }) {
 
   // getting an object of all beers alphabetically to be shown in dropwon
   const allBeers = getBeers(barsData);
+
+  useEffect(()=> {
+    beers=[];
+  }, [barsData]);
   
   // passing selected beers to App component to update the state for Maps
-  function getValue(event) {
+  function getValue (event) {
     //if beer is selected it adds it to the arr and updates the state
     if (event.target.textContent) {
       beers.push(event.target.textContent);
@@ -27,16 +31,16 @@ function BeerRange({barsData, beersFilter }) {
   
   return (
     <div className="beerRange">
-     <p>Select your favourite beer</p>
-     <Dropdown
-       placeholder="Types"
-       fluid
-       multiple
-       search
-       selection
-       options={allBeers}
-       onChange={getValue}
-     />
+      <p>Select your favourite beer</p>
+      <Dropdown
+        placeholder="Types"
+        fluid
+        multiple
+        search
+        selection
+        options={allBeers}
+        onChange={getValue}
+      />
     </div>
   );
 }
@@ -45,11 +49,10 @@ function BeerRange({barsData, beersFilter }) {
 export default BeerRange;
 
 
-// helper function to get an array of all uniq beers as objects for dropdown 
-
-function getBeers(data) {
+// helper function to get an array of all uniq beers as objects for dropdown
+function getBeers (data) {
   const beers = [];
-  for(let i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     for (let y = 0; y < data[i].beers.length; y++) {
       if (beers.indexOf(data[i].beers[y]) === -1) beers.push(data[i].beers[y]);
     }
@@ -60,7 +63,7 @@ function getBeers(data) {
     key: el,
     text: el,
     value: el
-  }))
+  }));
   return allBeersObj;
 }
 

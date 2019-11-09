@@ -1,7 +1,18 @@
 .beerRange {
-  margin: 10px;
+  margin: 24.5px;
 }
 
-/* .ui.multiple.dropdown>.label {
-  color: red;
-} */
+.beerRange>p{
+  text-align: center;
+}
+
+/* styling Price Range here because I cannot reach due to npm Slider */
+.priceRange {
+  max-width: 90vw;
+}
+
+.priceRange>p {
+  max-width: 90vw;
+  text-align: center;
+}
+

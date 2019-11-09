@@ -1,3 +1,8 @@
 .typeRange {
-  margin: 10px;
+  margin: 24.5px;
+  height: 10.5vh;
+}
+
+.typeRange>p{
+  text-align: center;
 }

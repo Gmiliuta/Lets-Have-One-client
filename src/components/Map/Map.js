@@ -1,173 +1,195 @@
 import React, {useEffect, useState }  from 'react';
 
-import { GoogleMap } from "react-google-maps"
+import { GoogleMap } from '@react-google-maps/api';
 import MyMarker from '../MyMarker/MyMarker';
 import PlacesMarker from '../PlacesMarker/PlacesMarker';
 
 
 import './Map.css';
 
-function Map({mapsData}) {
+function Map ({mapsData, mapHeight}) {
 
   const [myLocation , setLocation] = useState();
+  const [mapLocation, setMapLocation]= useState();
   const [updateLocation, setUpdatedLocation] = useState(0);
-
-
+ 
+  //updating myLocation every 5s
   useEffect(()=>{
     currentLocation();
+    console.log('updating current location');
   }, [updateLocation]);
+ 
+  // setting mapLocation
+  useEffect(()=>{
+    currentMapLocation();
+  }, []);
 
    
   // getting current location
-  function currentLocation() {
+  function currentMapLocation () {
+    let pos = {};
+    navigator.geolocation.getCurrentPosition((position)=> {
+      pos.lat = position.coords.latitude;
+      pos.lng = position.coords.longitude;
+      setMapLocation(pos);
+    });
+  }
+
+  function currentLocation () {
     let pos = {};
     navigator.geolocation.getCurrentPosition((position)=> {
       pos.lat = position.coords.latitude;
       pos.lng = position.coords.longitude;
       setLocation(pos);
-    })
+    });
   }
 
   // updating live location every 5seconds
   // setTimeout(()=> {
-  //   setUpdatedLocation(updateLocation+1)
-  // }, 5000)
-  
+  //   setUpdatedLocation(updateLocation+1);
+  // }, 5000);
 
   return (
     <div>
-      { myLocation && 
+      {/* spinner for map component */}
+      { !mapLocation ? <div className="ui active centered inline loader" style={{top: '40vh' }}></div> :
         <GoogleMap 
-        defaultZoom={13} 
-        defaultCenter={myLocation}
-        defaultOptions={{
-          styles: [
-            {
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "saturation": -100
-                    },
-                    {
-                        "gamma": 0.54
-                    }
+          zoom={13}
+          mapContainerStyle={{
+            height: `${mapHeight}`,
+            width: '100%',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column-reverse'
+          }}
+          center={mapLocation}
+          options={{
+            styles: [
+              {
+                'stylers': [
+                  {
+                    'visibility': 'on'
+                  },
+                  {
+                    'saturation': -100
+                  },
+                  {
+                    'gamma': 0.54
+                  }
                 ]
-            },
-            {
-                "featureType": "road",
-                "elementType": "labels.icon",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
+              },
+              {
+                'featureType': 'road',
+                'elementType': 'labels.icon',
+                'stylers': [
+                  {
+                    'visibility': 'off'
+                  }
                 ]
-            },
-            {
-                "featureType": "water",
-                "stylers": [
-                    {
-                        "color": "#4d4946"
-                    }
+              },
+              {
+                'featureType': 'water',
+                'stylers': [
+                  {
+                    'color': '#4d4946'
+                  }
                 ]
-            },
-            {
-                "featureType": "poi",
-                "elementType": "labels.icon",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
+              },
+              {
+                'featureType': 'poi',
+                'elementType': 'labels.icon',
+                'stylers': [
+                  {
+                    'visibility': 'off'
+                  }
                 ]
-            },
-            {
-                "featureType": "poi",
-                "elementType": "labels.text",
-                "stylers": [
-                    {
-                        "visibility": "simplified"
-                    }
+              },
+              {
+                'featureType': 'poi',
+                'elementType': 'labels.text',
+                'stylers': [
+                  {
+                    'visibility': 'simplified'
+                  }
                 ]
-            },
-            {
-                "featureType": "road",
-                "elementType": "geometry.fill",
-                "stylers": [
-                    {
-                        "color": "#ffffff"
-                    }
+              },
+              {
+                'featureType': 'road',
+                'elementType': 'geometry.fill',
+                'stylers': [
+                  {
+                    'color': '#ffffff'
+                  }
                 ]
-            },
-            {
-                "featureType": "road.local",
-                "elementType": "labels.text",
-                "stylers": [
-                    {
-                        "visibility": "simplified"
-                    }
+              },
+              {
+                'featureType': 'road.local',
+                'elementType': 'labels.text',
+                'stylers': [
+                  {
+                    'visibility': 'simplified'
+                  }
                 ]
-            },
-            {
-                "featureType": "water",
-                "elementType": "labels.text.fill",
-                "stylers": [
-                    {
-                        "color": "#ffffff"
-                    }
+              },
+              {
+                'featureType': 'water',
+                'elementType': 'labels.text.fill',
+                'stylers': [
+                  {
+                    'color': '#ffffff'
+                  }
                 ]
-            },
-            {
-                "featureType": "transit.line",
-                "elementType": "geometry",
-                "stylers": [
-                    {
-                        "gamma": 0.48
-                    }
+              },
+              {
+                'featureType': 'transit.line',
+                'elementType': 'geometry',
+                'stylers': [
+                  {
+                    'gamma': 0.48
+                  }
                 ]
-            },
-            {
-                "featureType": "transit.station",
-                "elementType": "labels.icon",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
+              },
+              {
+                'featureType': 'transit.station',
+                'elementType': 'labels.icon',
+                'stylers': [
+                  {
+                    'visibility': 'off'
+                  }
                 ]
-            },
-            {
-                "featureType": "road",
-                "elementType": "geometry.stroke",
-                "stylers": [
-                    {
-                        "gamma": 7.18
-                    }
+              },
+              {
+                'featureType': 'road',
+                'elementType': 'geometry.stroke',
+                'stylers': [
+                  {
+                    'gamma': 7.18
+                  }
                 ]
-            }
-        ],
-          zoomControl: false,
-          mapTypeControl: false,
-          scaleControl: false,
-          streetViewControl: false,
-          rotateControl: true,
-          fullscreenControl: false
-        }}
+              }
+            ],
+            zoomControl: false,
+            mapTypeControl: false,
+            scaleControl: false,
+            streetViewControl: false,
+            rotateControl: true,
+            fullscreenControl: false
+          }}
         >
-        <MyMarker myLocation={myLocation}/>
-        {mapsData.map(bar => (
-          <PlacesMarker
-            key={bar.place_id}
-            location={bar.geometry}
-            name={bar.name}
-            icon={bar.icon}
-            myLocation={myLocation}
+          <MyMarker myLocation={myLocation}/>
+          {mapsData.map(bar => (
+            <PlacesMarker
+              key={bar.place_id}
+              place_id={bar.place_id}
+              location={bar.geometry}
+              name={bar.name}
+              myLocation={myLocation}
             />
-        ))}
+          ))}
         </GoogleMap>
-  
       } 
     </div>
-  )
+  );
 }
 
 export default Map;
