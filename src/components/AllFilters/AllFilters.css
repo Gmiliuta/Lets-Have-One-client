@@ -21,6 +21,9 @@
 .plusIcon {
   font-size: 30px;
   color:rgb(224, 225, 226);
+  top: 0.9vh;
+  /* left: 4vw; */
+  position: absolute;
 }
 
 .menuButtons {

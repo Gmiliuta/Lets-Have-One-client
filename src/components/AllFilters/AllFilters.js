@@ -55,8 +55,8 @@ function AllFilters ({ toggleFilters, postBarData }) {
       <img className="headerLogoImage" src="https://i.ibb.co/YRm3jD4/logo-Small.png" alt="logoImage" />
       <Modal
         centered={false}
-        style={{width: '200px', textAlign: 'left', left: '1vw', top: '4.5vh'}}
-        trigger={<button className="plusButton"><i className="fas fa-ellipsis-v plusIcon"></i></button>}  
+        style={{width: '200px', textAlign: 'left', left: '3.5vw', top: '4.5vh'}}
+        trigger={<button className="plusButton"><i className="fas fa-bars plusIcon"></i></button>}  
       >
         <Modal.Header>Menu</Modal.Header>
         <Modal.Content>

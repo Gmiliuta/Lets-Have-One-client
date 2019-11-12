@@ -168,7 +168,7 @@ function App () {
   
   //  posting new bar data from the client
   function postBarData (infoObj) {
-    fetch('http://localhost:3001/postBarsDataByCust', {
+    fetch('https://lets-have-one-project.herokuapp.com/postBarsDataByCust', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(infoObj)

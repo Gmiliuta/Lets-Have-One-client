@@ -7,6 +7,8 @@ import PlacesMarker from '../PlacesMarker/PlacesMarker';
 
 import './Map.css';
 
+const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+
 function Map ({mapsData, mapHeight}) {
 
   const [myLocation , setLocation] = useState();
@@ -51,7 +53,7 @@ function Map ({mapsData, mapHeight}) {
   // getting currentMap location for DEPLOYED Version
   function currentMapLocation () {
     let pos = {};
-    fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB-VI9od0NEumhAZI8pUkU4CxEhPMGehvE', {
+    fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${API_KEY}`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       'homeMobileCountryCode': 214,
