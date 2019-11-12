@@ -12,7 +12,7 @@ function BeerDetails ({ showBeerItem, beerName, displayBeerItem }) {
   const [beersData, setBeersData] = useState([]);
   
   useEffect(()=>{
-    fetch('http://localhost:3001/getBeersData')
+    fetch('https://lets-have-one-project.herokuapp.com/getBeersData')
       .then(response => response.json())
       .then(response => setBeersData(response.sort((a,b) => a.name - b.name ? -1 : 1)));
   }, []);

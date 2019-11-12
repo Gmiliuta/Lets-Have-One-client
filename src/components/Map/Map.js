@@ -12,11 +12,14 @@ function Map ({mapsData, mapHeight}) {
   const [myLocation , setLocation] = useState();
   const [mapLocation, setMapLocation]= useState();
   const [updateLocation, setUpdatedLocation] = useState(0);
+
+
+  const [currentDirection, setCurrentDirection] = useState();
+  const [markersData, setMarkersData] = useState(mapsData);
  
   //updating myLocation every 5s
   useEffect(()=>{
     currentLocation();
-    console.log('updating current location');
   }, [updateLocation]);
  
   // setting mapLocation
@@ -24,25 +27,86 @@ function Map ({mapsData, mapHeight}) {
     currentMapLocation();
   }, []);
 
-   
-  // getting current location
-  function currentMapLocation () {
-    let pos = {};
-    navigator.geolocation.getCurrentPosition((position)=> {
-      pos.lat = position.coords.latitude;
-      pos.lng = position.coords.longitude;
-      setMapLocation(pos);
-    });
+  //updating mapMarkers from filters
+  useEffect(()=>{
+    setMarkersData(mapsData);
+  }, [mapsData]);
+
+  // clearing previous direction 
+  function clearPrevDirection (direction) {
+    if (currentDirection) {
+      //reseting previous marker so direction will dissapear. Placing a timeout for for min timegap to reset marker and direction
+      let filteredMapMarkers = markersData.slice();
+      filteredMapMarkers = filteredMapMarkers.filter(el => el.place_id !== currentDirection);
+      setMarkersData(filteredMapMarkers);
+      setTimeout(()=> {
+        setMarkersData(mapsData);
+      }, 0.1);
+      setCurrentDirection(direction);
+    } else {
+      setCurrentDirection(direction);
+    }
   }
 
+  // getting currentMap location for DEPLOYED Version
+  function currentMapLocation () {
+    let pos = {};
+    fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB-VI9od0NEumhAZI8pUkU4CxEhPMGehvE', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      'homeMobileCountryCode': 214,
+      'homeMobileNetworkCode': 22,
+      'radioType': 'lte',
+    })
+      .then(response => response.json())
+      .then(response => {
+        pos.lat = response.location.lat;
+        pos.lng = response.location.lng;
+        setMapLocation(pos);
+      });
+  }
+
+  // getting currentMap location for DEVELOPMENT Version
+  // function currentMapLocation () {
+  //   let pos = {};
+  //   navigator.geolocation.getCurrentPosition((position)=> {
+  //     pos.lat = position.coords.latitude;
+  //     pos.lng = position.coords.longitude;
+  //     console.log(pos, 'fromNavigator');
+  //     setMapLocation(pos);
+  //   });
+  // }
+
+
+  // getting currentMY location and updating it every 5 seconds fro DEPLOYED VERSION
   function currentLocation () {
     let pos = {};
-    navigator.geolocation.getCurrentPosition((position)=> {
-      pos.lat = position.coords.latitude;
-      pos.lng = position.coords.longitude;
-      setLocation(pos);
-    });
+    fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB-VI9od0NEumhAZI8pUkU4CxEhPMGehvE', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      'homeMobileCountryCode': 214,
+      'homeMobileNetworkCode': 22,
+      'radioType': 'lte',
+    })
+      .then(response => response.json())
+      .then(response => {
+        pos.lat = response.location.lat;
+        pos.lng = response.location.lng;
+        setLocation(pos);
+      });
   }
+
+  // getting currentMY location and updating it every 5 seconds fro DEVELOPMENT VERSION
+  // function currentLocation () {
+  //   let pos = {};
+  //   navigator.geolocation.getCurrentPosition((position)=> {
+  //     pos.lat = position.coords.latitude;
+  //     pos.lng = position.coords.longitude;
+  //     console.log(pos, 'fromNavigator');
+  //     setLocation(pos);
+  //   });
+  // }
+
 
   // updating live location every 5seconds
   // setTimeout(()=> {
@@ -177,13 +241,14 @@ function Map ({mapsData, mapHeight}) {
           }}
         >
           <MyMarker myLocation={myLocation}/>
-          {mapsData.map(bar => (
+          {markersData.map(bar => (
             <PlacesMarker
               key={bar.place_id}
               place_id={bar.place_id}
               location={bar.geometry}
               name={bar.name}
               myLocation={myLocation}
+              clearPrevDirection={clearPrevDirection}
             />
           ))}
         </GoogleMap>

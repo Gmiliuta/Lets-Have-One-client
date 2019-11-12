@@ -32,9 +32,20 @@ function TypeRange ({barsData, typesFilter }) {
     }
   }
 
+  // toggling blurred background when selecting a beer type
+  function toggleBlurredBackground () {
+    const blurredDiv = document.getElementById('blurredDivBeerTypes');
+    if (blurredDiv.classList.contains('blurredContent')) {
+      blurredDiv.classList.remove('blurredContent');
+    } else {
+      blurredDiv.classList.add('blurredContent');
+    }
+  } 
+
   return (
     <div className="typeRange">
       <p>Select your favourite beer type</p>
+      <div id="blurredDivBeerTypes"></div>
       <Dropdown
         placeholder="Types"
         fluid
@@ -43,6 +54,9 @@ function TypeRange ({barsData, typesFilter }) {
         selection
         options={allTypes}
         onChange={getValueBeerType}
+        style={{zIndex: '12'}}
+        onClick={toggleBlurredBackground}
+        onBlur={toggleBlurredBackground}
       />
     </div>
   );

@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 
 import StarRatings from 'react-star-ratings';
 
-import DropdownOpenings from './DropdownOpenings/DropdownOpenings';
+import OpeningsPopUp from './OpeningsPopUp/OpeningsPopUp';
 
-
+import { Modal } from 'semantic-ui-react';
 
 import './SlideWindow.css';
 
@@ -14,13 +14,14 @@ function SlideWindow ({place_id, getDirection, hideInfo}) {
 
   useEffect(()=> {
     getPlaceInfo(place_id);
-  }, []);
+  }, [place_id]);
 
-  function getPlaceInfo (place_id) {
+
+  function getPlaceInfo (iD) {
     const map = new window.google.maps.Map(document.getElementById('mockMap'));
     const service = new window.google.maps.places.PlacesService(map);
     const request = {
-      placeId: place_id,
+      placeId: iD,
       fields: ['formatted_address', 'photo', 'name', 'opening_hours', 'rating']
     };
     service.getDetails(request, (place, status) => {
@@ -29,6 +30,7 @@ function SlideWindow ({place_id, getDirection, hideInfo}) {
       }
     });
   }
+
   // open times and partial address from Google maps for SlideWindow
   const openings = currentPlace && currentPlace.opening_hours.weekday_text;
   
@@ -51,13 +53,17 @@ function SlideWindow ({place_id, getDirection, hideInfo}) {
         </div>
         <div className="popUpBoxTimesAndDirection">
           <div>
-            { openings && <DropdownOpenings openings={ openings }/>}
+            { openings && <OpeningsPopUp openings={ openings }/>}
           </div>
-          <button className="ui blue inverted button" onClick={getDirection}><i className="fas fa-directions"></i>Get here</button>
+          <button className="ui blue inverted button" onClick={() => getDirection(place_id)}><i className="fas fa-directions"></i>Get here</button>
         </div>
         <div className="popUpBoxImages">
           {currentPlace && currentPlace.photos.map(photo => (
-            <div key={Math.floor(Math.random()*100000)} style={{backgroundImage:`url(${photo.getUrl()})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '116.953px', width: '116.953px', marginRight: '15px'}}></div>
+            <Modal
+              key={Math.floor(Math.random()*100000)}
+              trigger={<div key={Math.floor(Math.random()*100000)} style={{backgroundImage:`url(${photo.getUrl()})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '116.953px', width: '116.953px', marginRight: '15px'}}></div>}
+              content={<div style={{backgroundImage:`url(${photo.getUrl()})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '45vh', width: '100%'}}></div>}
+            />
           ))}
         </div>
       </div>

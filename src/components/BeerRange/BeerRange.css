@@ -16,3 +16,15 @@
   text-align: center;
 }
 
+
+/* css for blurred background in Beer and type selection */
+.blurredContent{
+  background-color: rgba(0,0,0,0.85);
+  z-index: 11;
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+

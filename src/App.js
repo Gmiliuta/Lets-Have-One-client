@@ -35,10 +35,10 @@ function App () {
   const [mapHeight, setMapHeight] = useState('82vh');
   
   useEffect(()=>{
-    fetch('http://localhost:3001/getBarsData')
+    fetch('https://lets-have-one-project.herokuapp.com/getBarsData')
       .then(response => response.json())
       .then(response => setBarsData(response));
-    fetch('http://localhost:3001/getMapsData')
+    fetch('https://lets-have-one-project.herokuapp.com/getMapsData')
       .then(response => response.json())
       .then(response => setMapsData(response));  
   }, []);
@@ -125,11 +125,11 @@ function App () {
       setFilters({price: false, beer: false, beerType: false });
       setMapHeight('82vh');
     } 
-    if (filt === 'Beer type') {
+    if (filt === 'Type') {
       setFilters({price: false, beer: false, beerType: true });
       setMapHeight('64vh');
     } 
-    if (filt === 'Beer type' && barFilters.beerType) {
+    if (filt === 'Type' && barFilters.beerType) {
       setFilters({price: false, beer: false, beerType: false});
       setMapHeight('82vh');
     } 
@@ -152,7 +152,7 @@ function App () {
     setMapBeerComp(false);
   }
  
-  // fucnt for beerDetailsItem
+  // func for beerDetailsItem
   function displayBeerItem (event) {
     setBeerItem(true);
     // replaceing dashes in the beerNames to avoid fetch crashing
@@ -165,6 +165,15 @@ function App () {
 
     }
   }
+  
+  //  posting new bar data from the client
+  function postBarData (infoObj) {
+    fetch('http://localhost:3001/postBarsDataByCust', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(infoObj)
+    });
+  }
 
 
   // having introLogo image for PWA
@@ -175,14 +184,14 @@ function App () {
   }, 1500);
 
   return (
-    <div> 
+    <div >
       { image ? <IntroLogo/> : <div className="dashboard">
         {/* mockMAP placed below is used in InfoWindow to fetch place data from Google API */}
         <div id="mockMap" style={{display: 'none'}}></div>
         {mapBeerComp ? <BeerDetails displayBeerItem={displayBeerItem} showBeerItem={showBeerItem} beerName={beerName && beerName} /> : 
           <div className="testing">
-            <AllFilters toggleFilters={toggleFilters}/>
-            { barFilters.price && <PriceRange  barsData={barsData && barsData} priceFilter={priceFilter} />}
+            <AllFilters toggleFilters={toggleFilters} postBarData={postBarData}/>
+            { barFilters.price && <PriceRange barsData={barsData && barsData} priceFilter={priceFilter} />}
             { barFilters.beer && <BeerRange barsData={barsData && barsData} beersFilter={beersFilter} />}
             { barFilters.beerType &&<TypeRange barsData={barsData && barsData} typesFilter={typesFilter} />}
             <div className="mapContainer" style={{height: `${mapHeight}`}}>

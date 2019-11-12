@@ -1,12 +1,10 @@
 import React, { useState, useEffect} from 'react';
 
-// import InputRange from 'react-input-range';
-// import 'react-input-range/lib/css/index.css';
-
 import 'rc-slider/assets/index.css';
 
 import Slider from 'rc-slider';
 
+// creating slider 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -19,6 +17,7 @@ function PriceRange ({barsData, priceFilter, priceReset}) {
  
   useEffect(() => {
     setPriceRange(initialPrice);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priceReset]);
   
   return (
@@ -45,8 +44,6 @@ function PriceRange ({barsData, priceFilter, priceReset}) {
 
 export default PriceRange;
 
-
-
 //helper functions to get minimum and maximum values of beer prices
 function getPrices (data) {
   const initialPrice = {
@@ -62,21 +59,6 @@ function getPrices (data) {
   return initialPrice;
 }
 
-
-{/* <InputRange
-inputRange={'display: none'}
-allowSameValues={true}
-maxValue={initialPrice.max}
-minValue={initialPrice.min}
-step={0.1}
-value={priceRange}
-onChange={value => {
-  value.min = Number(value.min.toFixed(1));
-  value.max = Number(value.max.toFixed(1));
-  setPriceRange(value);
-  priceFilter(value);
-}} 
-/> */}
 
 
 

@@ -10,14 +10,14 @@ function BeerDetailsItem ({ beerName }) {
   const [beerItemDetails, setBeerItemDetails] = useState({});
 
   useEffect(()=>{
-    fetch(`http://localhost:3001/getOneBeer/${beerName}`)
+    fetch(`https://lets-have-one-project.herokuapp.com/getOneBeer/${beerName}`)
       .then(response => response.json())
       .then(response=> {
         response.rating = Number(response.rating);
         setBeerItemDetails(response);
       });
-  }, []);
-
+  }, [beerName]);
+  
   return (
     
     <div>

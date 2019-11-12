@@ -29,8 +29,20 @@ function BeerRange ({barsData, beersFilter }) {
     }
   }
   
+  // toggling blurred background when selecting a beer
+  function toggleBlurredBackground () {
+    const blurredDiv = document.getElementById('blurredDivBeers');
+    if (blurredDiv.classList.contains('blurredContent')) {
+      blurredDiv.classList.remove('blurredContent');
+    } else {
+      blurredDiv.classList.add('blurredContent');
+    }
+  }
+  
   return (
-    <div className="beerRange">
+    <div id="beerRangeId" className="beerRange">
+      {/* div to make all page greyed out when filter is selected */}
+      <div id="blurredDivBeers"></div>
       <p>Select your favourite beer</p>
       <Dropdown
         placeholder="Types"
@@ -40,6 +52,9 @@ function BeerRange ({barsData, beersFilter }) {
         selection
         options={allBeers}
         onChange={getValue}
+        style={{zIndex: '12'}}
+        onClick={toggleBlurredBackground}
+        onBlur={toggleBlurredBackground}
       />
     </div>
   );
