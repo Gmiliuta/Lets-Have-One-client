@@ -20,7 +20,7 @@ const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 
 function App () {
 
-  // wrapping Map compoment as per instructions from NPM package
+  // preventing a map from re-rendering
   const MapWrapped = useCallback(Map, []);
   
   const [barsData, setBarsData] = useState([]);
