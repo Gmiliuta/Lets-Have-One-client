@@ -62,7 +62,7 @@ function SlideWindow ({place_id, getDirection, hideInfo}) {
             <Modal
               key={Math.floor(Math.random()*100000)}
               trigger={<div key={Math.floor(Math.random()*100000)} style={{backgroundImage:`url(${photo.getUrl()})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '116.953px', width: '116.953px', marginRight: '15px'}}></div>}
-              content={<div style={{backgroundImage:`url(${photo.getUrl()})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '45vh', width: '100%'}}></div>}
+              content={!!photo.getUrl() && <div style={{backgroundImage:`url(${photo.getUrl()})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '45vh', width: '100%'}}></div>}
             />
           ))}
         </div>

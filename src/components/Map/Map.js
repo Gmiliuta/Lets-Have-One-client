@@ -68,22 +68,10 @@ function Map ({mapsData, mapHeight}) {
       });
   }
 
-  // getting currentMap location for DEVELOPMENT Version
-  // function currentMapLocation () {
-  //   let pos = {};
-  //   navigator.geolocation.getCurrentPosition((position)=> {
-  //     pos.lat = position.coords.latitude;
-  //     pos.lng = position.coords.longitude;
-  //     console.log(pos, 'fromNavigator');
-  //     setMapLocation(pos);
-  //   });
-  // }
-
-
   // getting currentMY location and updating it every 5 seconds fro DEPLOYED VERSION
   function currentLocation () {
     let pos = {};
-    fetch('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB-VI9od0NEumhAZI8pUkU4CxEhPMGehvE', {
+    fetch(`https://www.googleapis.com/geolocation/v1/geolocate?key=${API_KEY}`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       'homeMobileCountryCode': 214,
@@ -97,18 +85,6 @@ function Map ({mapsData, mapHeight}) {
         setLocation(pos);
       });
   }
-
-  // getting currentMY location and updating it every 5 seconds fro DEVELOPMENT VERSION
-  // function currentLocation () {
-  //   let pos = {};
-  //   navigator.geolocation.getCurrentPosition((position)=> {
-  //     pos.lat = position.coords.latitude;
-  //     pos.lng = position.coords.longitude;
-  //     console.log(pos, 'fromNavigator');
-  //     setLocation(pos);
-  //   });
-  // }
-
 
   // updating live location every 5seconds
   // setTimeout(()=> {
