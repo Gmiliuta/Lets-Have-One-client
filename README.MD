@@ -26,7 +26,7 @@ cd Lets-Have-One-client
 npm install
 ```
 
-3. Start development server
+3. Start React app.
 ```
 npm start
 ```
